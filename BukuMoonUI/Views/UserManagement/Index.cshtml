@@ -1,0 +1,115 @@
+﻿@model BukuMoonUI.UI.Models.BukuViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h3>User Management Peminjaman Buku Moonlay~</h3>
+<br />
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <form method="post" action="/UserManagement/SearchUser" class="form-inline">
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="Keyword" class="sr-only">Keyword</label>
+                <input id="Keyword" asp-for="Keyword" class="form-control" placeholder="masukkan keyword">
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">Cari User!</button>
+        </form>
+        &ensp;&nbsp;
+        <button class="btn btn-success" data-toggle="modal" data-target="#modalLoginForm">Tambah User Baru</button>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Nama</th>
+                    <th scope="col">Alamat</th>
+                    <th scope="col">No Hp</th>
+                </tr>
+
+                @for (int i = 0; i < Model.ListUser.Count; i++)
+                {
+            <tr>
+                <th scope="row">@(i + 1)</th>
+                <td>@Model.ListUser[i].Nama</td>
+                <td>@Model.ListUser[i].Alamat</td>
+                <td>@Model.ListUser[i].NoHp</td>
+            </tr>
+                }
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Form Tambah User</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="ModalForm" method="post" action="/UserManagement/InsertData" style="padding:15px">
+                <div class="row">
+                    <div id="divNama" class="md-form col-sm-12">
+                        <label>Nama</label>
+                        <input asp-for="Nama" class="form-control" id="id">
+                        <span asp-validation-for="Nama" class="error text-danger"></span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div id="divAlamat" class="md-form col-sm-12">
+                        <label>Alamat</label>
+                        <input asp-for="Alamat" class="form-control" id="nama">
+                        <span asp-validation-for="Alamat" class="error text-danger"></span>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div id="divHp" class="md-form col-sm-12">
+                        <label>No HP</label>
+                        <input asp-for="NoHp" class="form-control" id="notelp">
+                        <span asp-validation-for="NoHp" class="error text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button id="submit" type="submit" class="btn btn-default">Save</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var message = '@(TempData["message"])';
+            if (message == "Berhasil Tambah User!") {
+                swal("", message, "success");
+            }
+            else if (message == "Data tidak valid") {
+                swal("", message);
+            }
+            else {
+
+            }
+        });
+
+
+    </script>
+}

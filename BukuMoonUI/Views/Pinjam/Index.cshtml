@@ -1,0 +1,128 @@
+﻿@model BukuMoonUI.UI.Models.BukuViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h2>Peminjaman Buku Moonlay</h2>
+<br />
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <form method="post" action="/Pinjam/SearchBuku" class="form-inline">
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="Keyword" class="sr-only">Keyword</label>
+                <input id="Keyword" asp-for="Keyword" class="form-control" placeholder="masukkan keyword">
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">Cari Buku!</button>
+        </form>
+        &ensp;&nbsp;
+        @if (Model.ListBuku.Count > 0)
+        {
+            <button class="btn btn-success" data-toggle="modal" data-target="#modalLoginForm">Pinjam</button>
+        }
+        <br />
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Judul Buku</th>
+                    <th scope="col">Stock</th>
+                </tr>
+
+                @for (int i = 0; i < Model.ListBuku.Count; i++)
+                {
+                    <tr>
+                        <th scope="row">@(i + 1)</th>
+                        <td>@Model.ListBuku[i].JudulBuku</td>
+                        <td>@Model.ListBuku[i].Stock</td>
+                    </tr>
+                }
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Form Peminjaman Buku</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="ModalForm" method="post" action="/Pinjam/InsertData" style="padding:15px">
+                <div class="row">
+                    <div id="divJudul" class="md-form col-sm-12">
+                        <label>Judul Buku</label> <br />
+                        <select class="mdb-select md-form" asp-for="Judul" asp-items="@(new SelectList(Model.ListOptionBuku,"Value","Text"))">
+                        </select>
+                        <span asp-validation-for="Judul" class="error text-danger"></span>
+                    </div>
+                </div>
+                <br />
+                <br>
+                <div class="row">
+                    <div id="divUser" class="md-form col-sm-12">
+                        <label>Pilih User</label> <br />
+                        <select class="mdb-select md-form" asp-for="User" asp-items="@(new SelectList(Model.ListOptionUser,"Value","Text"))">
+                        </select>
+                        <span asp-validation-for="User" class="error text-danger"></span>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div id="datetimepicker1" class="input-append date">
+                        &ensp;&nbsp;<label>Tanggal Pinjam</label> <br />
+                        &ensp;&nbsp;<input asp-for="TglPinjam" data-format="dd/MM/yyyy" type="date">
+                        <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div id="datetimepicker1" class="input-append date">
+                        &ensp;&nbsp;<label>Tanggal Pengembalian</label> <br />
+                        &ensp;&nbsp;<input asp-for="TglKembali" data-format="dd/MM/yyyy" type="date">
+                        <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button id="submit" type="submit" class="btn btn-default">Save</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var message = '@(TempData["message"])';
+            if (message == "Berhasil Pinjam Buku!") {
+                swal("", message, "success");
+            }
+            else if (message == "Data tidak valid") {
+                swal("", message);
+            }
+            else {
+
+            }
+        });
+
+
+    </script>
+}
